@@ -12,7 +12,7 @@ public class Fraction {
     HashMap<Quotient, Integer> quotient = new HashMap<>();
 
     // Constructor
-    public Fraction(int nominator, int denominator) throws Exception {
+    public Fraction(int nominator, int denominator) {
         if (denominator == 0) {
             throw new ArithmeticException("DivisionByZero");
         }
@@ -25,7 +25,7 @@ public class Fraction {
         reduceFraction();
     }
 
-    public Fraction(String fractionString) throws Exception {
+    public Fraction(String fractionString) {
         String[] stringArray = fractionString.split("/");
 
         if (stringArray.length != 2) {
@@ -91,7 +91,7 @@ public class Fraction {
         return denominator1 * denominator2;
     }
 
-    private static Fraction getReciprocal(Fraction fraction) throws Exception {
+    private static Fraction getReciprocal(Fraction fraction) {
         return new Fraction(fraction.getDenominator(), fraction.getNominator());
     }
 
@@ -100,9 +100,8 @@ public class Fraction {
      * @param fraction1 First fraction to add
      * @param fraction2 Second fraction to add
      * @return A sum of the fractions
-     * @throws Exception DivisionByZeroException when there's zero in denominator
      */
-    public static Fraction addFractions(Fraction fraction1, Fraction fraction2) throws Exception {
+    public static Fraction addFractions(Fraction fraction1, Fraction fraction2) {
         int nominator1 = fraction1.getNominator();
         int nominator2 = fraction2.getNominator();
         int denominator1 = fraction1.getDenominator();
@@ -124,9 +123,8 @@ public class Fraction {
      * Addition of arbitrary amount of fractions
      * @param fractions Fractions to add
      * @return A sum of the fractions
-     * @throws Exception DivisionByZeroException when there's zero in denominator
      */
-    public static Fraction addFractions(Fraction... fractions) throws Exception {
+    public static Fraction addFractions(Fraction... fractions) {
         Fraction result = fractions[0];
 
         for (int i = 1; i < fractions.length; i++) {
@@ -136,7 +134,13 @@ public class Fraction {
         return result;
     }
 
-    public static Fraction subtractFractions(Fraction fraction1, Fraction fraction2) throws Exception {
+    /**
+     * Subtraction of 2 fractions.
+     * @param fraction1 First fraction to subtract
+     * @param fraction2 Second fraction to subtract
+     * @return A difference of the fractions
+     */
+    public static Fraction subtractFractions(Fraction fraction1, Fraction fraction2) {
         int nominator1 = fraction1.getNominator();
         int nominator2 = fraction2.getNominator();
         int denominator1 = fraction1.getDenominator();
@@ -157,10 +161,9 @@ public class Fraction {
     /**
      * Subtraction of arbitrary amount of fractions
      * @param fractions Fractions to subtract
-     * @return A sum of the fractions
-     * @throws Exception DivisionByZeroException when there's zero in denominator
+     * @return A difference of the fractions
      */
-    public static Fraction subtractFractions(Fraction... fractions) throws Exception {
+    public static Fraction subtractFractions(Fraction... fractions) {
         Fraction result = fractions[0];
 
         for (int i = 1; i < fractions.length; i++) {
