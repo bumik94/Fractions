@@ -68,7 +68,7 @@ public class Fraction {
      */
     private static int getGreatestCommonFactor(int value1, int value2) {
         if (value1 == value2) return value1;
-        int minValue = Integer.min(Math.abs(value1), Math.abs(value2));
+        int minValue = Math.min(Math.abs(value1), Math.abs(value2));
         int factor = 1;
 
         for (int i = 2; i <= minValue; i++) {
@@ -88,7 +88,15 @@ public class Fraction {
     }
 
     private static int getLeastCommonDenominator(int denominator1, int denominator2) {
-        return denominator1 * denominator2;
+        int maxValue = Math.max(denominator1, denominator2);
+        int minValue = Math.min(denominator1, denominator2);
+        int result = maxValue;
+
+        while (result % minValue != 0) {
+            result += maxValue;
+        }
+
+        return result;
     }
 
     private static Fraction getReciprocal(Fraction fraction) {
