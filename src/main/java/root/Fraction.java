@@ -88,7 +88,7 @@ public class Fraction {
     }
 
     private static int getLeastCommonDenominator(int denominator1, int denominator2) {
-        int maxValue = Math.max(denominator1, denominator2);
+        int maxValue = Math.max(Math.abs(denominator1), Math.abs(denominator2));
         int minValue = Math.min(denominator1, denominator2);
         int result = maxValue;
 
