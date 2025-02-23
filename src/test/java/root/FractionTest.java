@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class FractionTest {
 
     @Test
-    void testAddFractions() throws Exception {
+    void testAddFractions() {
         Fraction f1 = new Fraction(1, 2);
         Fraction f2 = new Fraction(1,3);
 
@@ -19,7 +19,7 @@ class FractionTest {
     }
 
     @Test
-    void testAddMultipleFractions() throws Exception {
+    void testAddMultipleFractions() {
         Fraction f1 = new Fraction(1, 2);
         Fraction f2 = new Fraction(1,3);
         Fraction f3 = new Fraction(1,4);
@@ -32,7 +32,7 @@ class FractionTest {
     }
 
     @Test
-    void testSubtractFractions() throws Exception {
+    void testSubtractFractions() {
         Fraction f1 = new Fraction(2, 3);
         Fraction f2 = new Fraction(1,2);
 
@@ -44,7 +44,7 @@ class FractionTest {
     }
 
     @Test
-    void testSubtractMultipleFractions() throws Exception {
+    void testSubtractMultipleFractions() {
         Fraction f1 = new Fraction(2, 3);
         Fraction f2 = new Fraction(1,2);
         Fraction f3 = new Fraction(1,3);
