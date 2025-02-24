@@ -25,21 +25,21 @@ public class Fraction {
         reduceFraction();
     }
 
-    public Fraction(String fractionString) {
-        String[] stringArray = fractionString.split("/");
+    public Fraction(String fraction) {
+        String[] fractionArray = fraction.split("/");
 
-        if (stringArray.length != 2) {
+        if (fractionArray.length != 2) {
             throw new IllegalArgumentException("InvalidFractionFormat");
-        } else if (stringArray[Quotient.DENOMINATOR.ordinal()].equals("0") ) {
+        } else if (fractionArray[Quotient.DENOMINATOR.ordinal()].equals("0") ) {
             throw new ArithmeticException("DivisionByZero");
         }
 
         this.quotient.put(
                 Quotient.NOMINATOR,
-                Integer.valueOf(stringArray[Quotient.NOMINATOR.ordinal()]));
+                Integer.valueOf(fractionArray[Quotient.NOMINATOR.ordinal()]));
         this.quotient.put(
                 Quotient.DENOMINATOR,
-                Integer.valueOf(stringArray[Quotient.DENOMINATOR.ordinal()]));
+                Integer.valueOf(fractionArray[Quotient.DENOMINATOR.ordinal()]));
         reduceFraction();
     }
 
@@ -87,9 +87,15 @@ public class Fraction {
         );
     }
 
-    private static int getLeastCommonDenominator(int denominator1, int denominator2) {
-        int maxValue = Math.max(Math.abs(denominator1), Math.abs(denominator2));
-        int minValue = Math.min(denominator1, denominator2);
+    /**
+     * Find the least common denominator of 2 fractions.
+     * @param value1 Denominator of first fraction
+     * @param value2 Denominator of second fraction
+     * @return The least common denominator of 2 fractions
+     */
+    private static int getLeastCommonDenominator(int value1, int value2) {
+        int maxValue = Math.max(Math.abs(value1), Math.abs(value2));
+        int minValue = Math.min(Math.abs(value1), Math.abs(value2));
         int result = maxValue;
 
         while (result % minValue != 0) {
@@ -99,6 +105,11 @@ public class Fraction {
         return result;
     }
 
+    /**
+     * Get a reciprocal of a fraction.
+     * @param fraction Fraction from which to get the reciprocal
+     * @return A reciprocal of the fraction
+     */
     private static Fraction getReciprocal(Fraction fraction) {
         return new Fraction(fraction.getDenominator(), fraction.getNominator());
     }
@@ -128,7 +139,7 @@ public class Fraction {
     }
 
     /**
-     * Addition of arbitrary amount of fractions
+     * Addition of arbitrary amount of fractions.
      * @param fractions Fractions to add
      * @return A sum of the fractions
      */
@@ -167,7 +178,7 @@ public class Fraction {
     }
 
     /**
-     * Subtraction of arbitrary amount of fractions
+     * Subtraction of arbitrary amount of fractions.
      * @param fractions Fractions to subtract
      * @return A difference of the fractions
      */
@@ -182,7 +193,50 @@ public class Fraction {
     }
 
     /**
-     * Reduce fraction by its greatest common factor
+     * Multiplication of 2 fractions.
+     * @param fraction1 First fraction to multiply
+     * @param fraction2 Second fraction to multiply
+     * @return A product of the fractions
+     */
+    public static Fraction multiplyFractions(Fraction fraction1, Fraction fraction2) {
+        int nominator1 = fraction1.getNominator();
+        int nominator2 = fraction2.getNominator();
+        int denominator1 = fraction1.getDenominator();
+        int denominator2 = fraction2.getDenominator();
+
+        return new Fraction(
+                (nominator1 * nominator2),
+                (denominator1 * denominator2)
+        );
+    }
+
+    /**
+     * Multiplication of arbitrary amount of fractions.
+     * @param fractions Fractions to multiply
+     * @return A product of the fractions
+     */
+    public static Fraction multiplyFractions(Fraction... fractions) {
+        Fraction result = fractions[0];
+
+        for (int i = 1; i < fractions.length; i++) {
+            result = multiplyFractions(result, fractions[i]);
+        }
+
+        return result;
+    }
+
+    /**
+     * Division of 2 fractions.
+     * @param fraction1 First fraction to divide
+     * @param fraction2 Second fraction to divide
+     * @return A product of the fractions
+     */
+    public static Fraction divideFractions(Fraction fraction1, Fraction fraction2) {
+        return multiplyFractions(fraction1, getReciprocal(fraction2));
+    }
+
+    /**
+     * Reduce fraction by its greatest common factor.
      */
     private void reduceFraction() {
         int greatestCommonFactor = getGreatestCommonFactor(this);
