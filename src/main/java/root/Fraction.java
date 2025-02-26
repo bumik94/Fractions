@@ -1,6 +1,7 @@
 package root;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Fraction {
 
@@ -9,55 +10,49 @@ public class Fraction {
         DENOMINATOR
     }
 
-    HashMap<Quotient, Integer> quotient = new HashMap<>();
+    Integer[] fraction = new Integer[2];
 
     // Constructor
-    public Fraction(int nominator, int denominator) {
-        if (denominator == 0) {
-            throw new ArithmeticException("DivisionByZero");
+    public Fraction( int nominator, int denominator ) {
+        if ( denominator == 0 ) {
+            throw new ArithmeticException( "DivisionByZero" );
         }
-        this.quotient.put(
-                Quotient.NOMINATOR,
-                nominator);
-        this.quotient.put(
-                Quotient.DENOMINATOR,
-                denominator);
-        reduceFraction();
+        this.fraction[ Quotient.NOMINATOR.ordinal() ] = nominator;
+        this.fraction[ Quotient.DENOMINATOR.ordinal() ] = denominator;
+        reduceFraction( this );
     }
 
-    public Fraction(String fraction) {
-        String[] fractionArray = fraction.split("/");
+    public Fraction( String s ) {
+        String[] f = s.split( "/" );
 
-        if (fractionArray.length != 2) {
-            throw new IllegalArgumentException("InvalidFractionFormat");
-        } else if (fractionArray[Quotient.DENOMINATOR.ordinal()].equals("0") ) {
-            throw new ArithmeticException("DivisionByZero");
+        if ( f.length != 2 ) {
+            throw new IllegalArgumentException( "InvalidFractionFormat" );
+        } else if ( f [ Quotient.DENOMINATOR.ordinal() ].equals( "0" ) ) {
+            throw new ArithmeticException( "DivisionByZero" );
         }
 
-        this.quotient.put(
-                Quotient.NOMINATOR,
-                Integer.valueOf(fractionArray[Quotient.NOMINATOR.ordinal()]));
-        this.quotient.put(
-                Quotient.DENOMINATOR,
-                Integer.valueOf(fractionArray[Quotient.DENOMINATOR.ordinal()]));
-        reduceFraction();
+        this.fraction[ Quotient.NOMINATOR.ordinal() ]
+                = Integer.valueOf( f [ Quotient.NOMINATOR.ordinal() ] );
+        this.fraction[ Quotient.DENOMINATOR.ordinal() ]
+                = Integer.valueOf( f [ Quotient.DENOMINATOR.ordinal() ] );
+        reduceFraction( this );
     }
 
     // Getters & Setters
     private int getNominator() {
-        return quotient.get(Quotient.NOMINATOR);
+        return this.fraction[ Quotient.NOMINATOR.ordinal() ];
     }
 
     private int getDenominator() {
-        return quotient.get(Quotient.DENOMINATOR);
+        return this.fraction[ Quotient.DENOMINATOR.ordinal() ];
     }
 
-    private void setNominator(int nominator) {
-        this.quotient.put(Quotient.NOMINATOR, nominator);
+    private void setNominator( int nominator ) {
+        this.fraction[ Quotient.NOMINATOR.ordinal() ] = nominator;
     }
 
-    private void setDenominator(int denominator) {
-        this.quotient.put(Quotient.DENOMINATOR, denominator);
+    private void setDenominator( int denominator ) {
+        this.fraction[ Quotient.DENOMINATOR.ordinal() ] = denominator;
     }
 
     /**
@@ -66,13 +61,13 @@ public class Fraction {
      * @param value2 second number to compare
      * @return the greatest common factor if the numbers have one, otherwise 1
      */
-    private static int getGreatestCommonFactor(int value1, int value2) {
-        if (value1 == value2) return value1;
-        int minValue = Math.min(Math.abs(value1), Math.abs(value2));
+    private static int getGreatestCommonFactor( int value1, int value2 ) {
+        if ( value1 == value2 ) return value1;
+        int minValue = Math.min( Math.abs( value1 ), Math.abs( value2 ) );
         int factor = 1;
 
-        for (int i = 2; i <= minValue; i++) {
-            if (value1 % i == 0 && value2 % i == 0) {
+        for ( int i = 2; i <= minValue; i++ ) {
+            if ( value1 % i == 0 && value2 % i == 0 ) {
                 factor = i;
             }
         }
@@ -80,10 +75,10 @@ public class Fraction {
         return factor;
     }
 
-    private static int getGreatestCommonFactor(Fraction fraction) {
+    private static int getGreatestCommonFactor( Fraction f ) {
         return getGreatestCommonFactor(
-                fraction.getNominator(),
-                fraction.getDenominator()
+                f.getNominator(),
+                f.getDenominator()
         );
     }
 
@@ -93,12 +88,12 @@ public class Fraction {
      * @param value2 Denominator of second fraction
      * @return The least common denominator of 2 fractions
      */
-    private static int getLeastCommonDenominator(int value1, int value2) {
-        int maxValue = Math.max(Math.abs(value1), Math.abs(value2));
-        int minValue = Math.min(Math.abs(value1), Math.abs(value2));
+    private static int getLeastCommonDenominator( int value1, int value2 ) {
+        int maxValue = Math.max( Math.abs( value1 ), Math.abs( value2 ) );
+        int minValue = Math.min( Math.abs( value1 ), Math.abs( value2 ) );
         int result = maxValue;
 
-        while (result % minValue != 0) {
+        while ( result % minValue != 0 ) {
             result += maxValue;
         }
 
@@ -107,32 +102,42 @@ public class Fraction {
 
     /**
      * Get a reciprocal of a fraction.
-     * @param fraction Fraction from which to get the reciprocal
+     * @param f Fraction from which to get the reciprocal
      * @return A reciprocal of the fraction
      */
-    private static Fraction getReciprocal(Fraction fraction) {
-        return new Fraction(fraction.getDenominator(), fraction.getNominator());
+    private static Fraction getReciprocal( Fraction f ) {
+        return new Fraction( f.getDenominator(), f.getNominator() );
+    }
+
+    /**
+     * Reduce fraction by its greatest common factor.
+     */
+    private static void reduceFraction( Fraction f ) {
+        int greatestCommonFactor = getGreatestCommonFactor( f );
+
+        f.setNominator( f.getNominator() / greatestCommonFactor );
+        f.setDenominator( f.getDenominator() / greatestCommonFactor );
     }
 
     /**
      * Addition of 2 fractions.
-     * @param fraction1 First fraction to add
-     * @param fraction2 Second fraction to add
+     * @param f1 First fraction to add
+     * @param f2 Second fraction to add
      * @return A sum of the fractions
      */
-    public static Fraction addFractions(Fraction fraction1, Fraction fraction2) {
-        int nominator1 = fraction1.getNominator();
-        int nominator2 = fraction2.getNominator();
-        int denominator1 = fraction1.getDenominator();
-        int denominator2 = fraction2.getDenominator();
+    public static Fraction addFractions( Fraction f1, Fraction f2 ) {
+        int nominator1 = f1.getNominator();
+        int nominator2 = f2.getNominator();
+        int denominator1 = f1.getDenominator();
+        int denominator2 = f2.getDenominator();
 
-        if (denominator1 == denominator2) {
-            return new Fraction((nominator1 + nominator2), denominator1);
+        if ( denominator1 == denominator2 ) {
+            return new Fraction( ( nominator1 + nominator2 ), denominator1 );
         } else {
-            int leastCommonDenominator = getLeastCommonDenominator(denominator1, denominator2);
+            int leastCommonDenominator = getLeastCommonDenominator( denominator1, denominator2 );
             return new Fraction(
-                    (leastCommonDenominator / denominator1) * nominator1
-                            + (leastCommonDenominator / denominator2) * nominator2,
+                    ( leastCommonDenominator / denominator1 ) * nominator1
+                            + ( leastCommonDenominator / denominator2 ) * nominator2,
                     leastCommonDenominator
             );
         }
@@ -140,14 +145,14 @@ public class Fraction {
 
     /**
      * Addition of arbitrary amount of fractions.
-     * @param fractions Fractions to add
+     * @param f Fractions to add
      * @return A sum of the fractions
      */
-    public static Fraction addFractions(Fraction... fractions) {
-        Fraction result = fractions[0];
+    public static Fraction addFractions( Fraction... f ) {
+        Fraction result = f[0];
 
-        for (int i = 1; i < fractions.length; i++) {
-            result = addFractions(result, fractions[i]);
+        for ( int i = 1; i < f.length; i++ ) {
+            result = addFractions( result, f[i] );
         }
 
         return result;
@@ -155,23 +160,23 @@ public class Fraction {
 
     /**
      * Subtraction of 2 fractions.
-     * @param fraction1 First fraction to subtract
-     * @param fraction2 Second fraction to subtract
+     * @param f1 First fraction to subtract
+     * @param f2 Second fraction to subtract
      * @return A difference of the fractions
      */
-    public static Fraction subtractFractions(Fraction fraction1, Fraction fraction2) {
-        int nominator1 = fraction1.getNominator();
-        int nominator2 = fraction2.getNominator();
-        int denominator1 = fraction1.getDenominator();
-        int denominator2 = fraction2.getDenominator();
+    public static Fraction subtractFractions( Fraction f1 , Fraction f2 ) {
+        int nominator1 = f1.getNominator();
+        int nominator2 = f2.getNominator();
+        int denominator1 = f1.getDenominator();
+        int denominator2 = f2.getDenominator();
 
-        if (denominator1 == denominator2) {
-            return new Fraction((nominator1 - nominator2), denominator1);
+        if ( denominator1 == denominator2 ) {
+            return new Fraction( ( nominator1 - nominator2 ), denominator1 );
         } else {
-            int leastCommonDenominator = getLeastCommonDenominator(denominator1, denominator2);
+            int leastCommonDenominator = getLeastCommonDenominator( denominator1, denominator2 );
             return new Fraction(
-                    (leastCommonDenominator / denominator1) * nominator1
-                            - (leastCommonDenominator / denominator2) * nominator2,
+                    ( leastCommonDenominator / denominator1 ) * nominator1
+                            - ( leastCommonDenominator / denominator2 ) * nominator2,
                     leastCommonDenominator
             );
         }
@@ -179,14 +184,14 @@ public class Fraction {
 
     /**
      * Subtraction of arbitrary amount of fractions.
-     * @param fractions Fractions to subtract
+     * @param f Fractions to subtract
      * @return A difference of the fractions
      */
-    public static Fraction subtractFractions(Fraction... fractions) {
-        Fraction result = fractions[0];
+    public static Fraction subtractFractions( Fraction... f ) {
+        Fraction result = f[0];
 
-        for (int i = 1; i < fractions.length; i++) {
-            result = subtractFractions(result, fractions[i]);
+        for ( int i = 1; i < f.length; i++ ) {
+            result = subtractFractions( result, f[i] );
         }
 
         return result;
@@ -194,32 +199,32 @@ public class Fraction {
 
     /**
      * Multiplication of 2 fractions.
-     * @param fraction1 First fraction to multiply
-     * @param fraction2 Second fraction to multiply
+     * @param f1 First fraction to multiply
+     * @param f2 Second fraction to multiply
      * @return A product of the fractions
      */
-    public static Fraction multiplyFractions(Fraction fraction1, Fraction fraction2) {
-        int nominator1 = fraction1.getNominator();
-        int nominator2 = fraction2.getNominator();
-        int denominator1 = fraction1.getDenominator();
-        int denominator2 = fraction2.getDenominator();
+    public static Fraction multiplyFractions( Fraction f1, Fraction f2 ) {
+        int nominator1 = f1.getNominator();
+        int nominator2 = f2.getNominator();
+        int denominator1 = f1.getDenominator();
+        int denominator2 = f2.getDenominator();
 
         return new Fraction(
-                (nominator1 * nominator2),
-                (denominator1 * denominator2)
+                ( nominator1 * nominator2 ),
+                ( denominator1 * denominator2 )
         );
     }
 
     /**
      * Multiplication of arbitrary amount of fractions.
-     * @param fractions Fractions to multiply
+     * @param f Fractions to multiply
      * @return A product of the fractions
      */
-    public static Fraction multiplyFractions(Fraction... fractions) {
-        Fraction result = fractions[0];
+    public static Fraction multiplyFractions( Fraction... f ) {
+        Fraction result = f[0];
 
-        for (int i = 1; i < fractions.length; i++) {
-            result = multiplyFractions(result, fractions[i]);
+        for ( int i = 1; i < f.length; i++ ) {
+            result = multiplyFractions( result, f[i] );
         }
 
         return result;
@@ -227,27 +232,28 @@ public class Fraction {
 
     /**
      * Division of 2 fractions.
-     * @param fraction1 First fraction to divide
-     * @param fraction2 Second fraction to divide
+     * @param f1 First fraction to divide
+     * @param f2 Second fraction to divide
      * @return A product of the fractions
      */
-    public static Fraction divideFractions(Fraction fraction1, Fraction fraction2) {
-        return multiplyFractions(fraction1, getReciprocal(fraction2));
-    }
-
-    /**
-     * Reduce fraction by its greatest common factor.
-     */
-    private void reduceFraction() {
-        int greatestCommonFactor = getGreatestCommonFactor(this);
-
-        this.setNominator(this.getNominator() / greatestCommonFactor);
-        this.setDenominator(this.getDenominator() / greatestCommonFactor);
+    public static Fraction divideFractions( Fraction f1, Fraction f2 ) {
+        return multiplyFractions( f1, getReciprocal( f2 ) );
     }
 
     @Override
     public String toString() {
-        return String.valueOf(this.getNominator()) + '/' + this.getDenominator();
+        return String.valueOf( this.getNominator() ) + '/' + this.getDenominator();
     }
 
+    @Override
+    public boolean equals( Object o ) {
+        if ( o == null || getClass() != o.getClass() ) return false;
+        Fraction f = ( Fraction ) o;
+        return Objects.deepEquals( fraction, f.fraction );
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode( fraction );
+    }
 }

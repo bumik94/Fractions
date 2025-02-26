@@ -15,7 +15,7 @@ class FractionTest {
 
         Fraction expectedSum = new Fraction("5/6");
 
-        assertEquals(actualSum.toString(), expectedSum.toString());
+        assertEquals(actualSum, expectedSum);
     }
 
     @Test
@@ -28,7 +28,7 @@ class FractionTest {
 
         Fraction expectedSum = new Fraction("13/12");
 
-        assertEquals(actualSum.toString(), expectedSum.toString());
+        assertEquals(actualSum, expectedSum);
     }
 
     @Test
@@ -40,7 +40,7 @@ class FractionTest {
 
         Fraction expectedDifference = new Fraction("1/6");
 
-        assertEquals(actualDifference.toString(), expectedDifference.toString());
+        assertEquals(actualDifference, expectedDifference);
     }
 
     @Test
@@ -53,7 +53,7 @@ class FractionTest {
 
         Fraction expectedDifference = new Fraction("-1/6");
 
-        assertEquals(actualDifference.toString(), expectedDifference.toString());
+        assertEquals(actualDifference, expectedDifference);
     }
 
     @Test
@@ -65,7 +65,7 @@ class FractionTest {
 
         Fraction expectedProduct = new Fraction("1/3");
 
-        assertEquals(actualProduct.toString(), expectedProduct.toString());
+        assertEquals(actualProduct, expectedProduct);
     }
     @Test
     void testMultiplyMultipleFractions() {
@@ -77,7 +77,7 @@ class FractionTest {
 
         Fraction expectedProduct = new Fraction("-1/2");
 
-        assertEquals(actualProduct.toString(), expectedProduct.toString());
+        assertEquals(actualProduct, expectedProduct);
     }
 
     @Test
@@ -85,10 +85,10 @@ class FractionTest {
         Fraction f1 = new Fraction(1, 2);
         Fraction f2 = new Fraction(2, 3);
 
-        Fraction actualProduct = Fraction.divideFractions(f1, f2);
+        Fraction actualQuotient = Fraction.divideFractions(f1, f2);
 
-        Fraction expectedProduct = new Fraction("3/4");
+        Fraction expectedQuotient = new Fraction("3/4");
 
-        assertEquals(actualProduct.toString(), expectedProduct.toString());
+        assertEquals(actualQuotient, expectedQuotient);
     }
 }
